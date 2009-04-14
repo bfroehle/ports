@@ -1,0 +1,28 @@
+# $Id$
+PortSystem          1.0
+
+name                gap
+version             4r4p10
+categories          gap
+maintainers         brad.froehle@gmail.com openmaintainer
+description         Groups, Algorithms and Programming computer algebra \
+                        system
+
+long_description    GAP is a system for computational discrete algebra, \
+                    with particular emphasis on Computational Group Theory. \
+                    GAP provides a programming language, a library of \
+                    thousands of functions implementing algebraic \
+                    algorithms written in the GAP language as well as large \
+                    data libraries of algebraic objects.
+
+homepage            http://www.gap-system.org/
+platforms           darwin
+master_sites        ftp://ftp.gap-system.org/pub/gap/gap4/tar.gz/
+distname            ${name}${version}
+worksrcdir          ${name}4r4
+
+checksums           md5 7377cdb94d664a4237f39d5785db11b6 \
+                    sha1 aeb726d57eee18ecfa06a233fe1e07bb3c568135 \
+                    rmd160 fce2d9637723af7b36d16b2133fb19c441845140
+
+build.target        default
