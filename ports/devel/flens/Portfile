@@ -1,0 +1,42 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:filetype=tcl:et:sw=4:ts=4:sts=4
+# $Id: Portfile 3 2009-09-04 20:36:19Z froehle $
+
+PortSystem 1.0
+
+name                flens
+version             2009-06-12
+categories          devel math
+platforms           darwin
+maintainers         gmail.com:brad.froehle
+
+description     Flexible Library for Efficient Numerical Solutions
+long_description \
+    FLENS is a convenient and efficient C++ interface for BLAS and LAPACK.
+
+homepage        http://flens.sourceforge.net/
+master_sites    sourceforge
+distname        FLENS-${version}
+extract.suffix  .tgz
+
+checksums \
+        md5     82ba1c882c336a461ab2bc1e1e6f3058 \
+        sha1    fc784963d98764edc234cc6cef272cf0d46bf3b8 \
+        rmd160  98da1de53acb2c96564fa5438034f0a1dcec629c
+
+post-patch {
+    reinplace "s|/usr/local|\$(DESTDIR)${prefix}|g" ${worksrcpath}/Makefile.common
+    reinplace "s|/sw|${prefix}|g" ${worksrcpath}/Makefile.common
+}
+
+configure {
+    file copy ${worksrcpath}/config.macosx ${worksrcpath}/config
+}
+
+destroot.pre_args -B install
+
+post-destroot {
+	xinstall -m 755 -d ${destroot}${prefix}/share/doc/${name}
+	xinstall -m 644 -W ${worksrcpath} README LICENSE \
+	                                  ${destroot}${prefix}/share/doc/${name}
+}
+
