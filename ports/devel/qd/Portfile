@@ -28,7 +28,12 @@ checksums \
         sha1    d7a0c6fd3854dbed5204b8e4fa7d0ad8801be717 \
         rmd160  782b27a13654d9d132a6f9f885d8ad176e1e1fda
 
-livecheck.check     regex
+post-build {
+    reinplace -E {s|-arch [a-z0-9_]+||g} \
+        ${worksrcpath}/qd-config
+}
+
+livecheck.type      regex
 livecheck.url       ${homepage}
 livecheck.regex     {qd-(\d+(?:\.\d+)*).tar.gz}
 
