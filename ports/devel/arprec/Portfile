@@ -1,0 +1,45 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:filetype=tcl:et:sw=4:ts=4:sts=4
+# $Id: Portfile 6 2010-04-16 21:00:59Z froehle $
+
+PortSystem 1.0
+
+name                arprec
+version             2.2.4
+categories          devel math
+platforms           darwin
+maintainers         gmail.com:brad.froehle
+
+description     C++/Fortran-90 arbitrary precision package
+
+long_description \
+    This package supports a flexible, arbitrarily high level of numeric \
+    precision -- the equivalent of hundreds or even thousands of decimal \
+    digits (up to approximately ten million digits if needed). Special \
+    routines are provided for extra-high precision (above 1000 digits). The \
+    entire library is written in C++. High-precision real, integer and \
+    complex datatypes are supported. Both C++ and Fortran-90 translation \
+    modules are also provided that permit one to convert an existing C++ or \
+    Fortran-90 program to use the library with only minor changes to the \
+    source code. In most cases only the type statements and (in the case of \
+    Fortran-90 programs) read/write statements need be changed. Six \
+    implementations of PSLQ (one-, two- and three-level, regular and \
+    multi-pair) are included, as well as three high-precision quadrature \
+    programs.
+
+homepage        http://crd.lbl.gov/~dhbailey/mpdist/
+master_sites    ${homepage}
+
+checksums \
+        md5     f9c5acda87ed3afdec3e4d6a4e97af05 \
+        sha1    8bc5445309704b5f2e37e7699b3dea45da86082a \
+        rmd160  00f11c39f1011ddd4df7aa0d53a9d4e8e7929e21
+
+post-build {
+    reinplace -E {s|-arch [a-z0-9_]+||g} \
+        ${worksrcpath}/arprec-config
+}
+
+livecheck.type      regex
+livecheck.url       ${homepage}
+livecheck.regex     {arprec-(\d+(?:\.\d+)*).tar.gz}
+
