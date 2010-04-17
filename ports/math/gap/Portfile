@@ -1,10 +1,16 @@
 # $Id$
 PortSystem          1.0
 
+## TODO:
+#  * Add epoch
+#  * Allow options for other packages 
+#    (see http://www.freebsd.org/cgi/cvsweb.cgi/ports/math/gap/Makefile?rev=1.41)
+
+
 name                gap
-version             4r4p10
+version             4r4p12
 categories          gap
-maintainers         brad.froehle@gmail.com openmaintainer
+maintainers         gmail.com:brad.froehle openmaintainer
 description         Groups, Algorithms and Programming computer algebra \
                         system
 
@@ -17,12 +23,38 @@ long_description    GAP is a system for computational discrete algebra, \
 
 homepage            http://www.gap-system.org/
 platforms           darwin
-master_sites        ftp://ftp.gap-system.org/pub/gap/gap4/tar.gz/
+master_sites        ftp://ftp.gap-system.org/pub/gap/gap4/tar.bz2/
 distname            ${name}${version}
 worksrcdir          ${name}4r4
 
-checksums           md5 7377cdb94d664a4237f39d5785db11b6 \
-                    sha1 aeb726d57eee18ecfa06a233fe1e07bb3c568135 \
-                    rmd160 fce2d9637723af7b36d16b2133fb19c441845140
+use_bzip2           yes
+
+checksums           md5 2808c00e85e98843bb0e1a62c33ad5f0 \
+                    sha1 b6b6b809c0a2ec5ed202fa672517a2199b0bf91e \
+                    rmd160 124f78de675b952032a50c5bc19a49b870410964
 
 build.target        default
+
+set gap_libdir ${prefix}/lib/${name}4r4
+
+post-patch {
+    reinplace -E "s|GAP_DIR=.*|GAP_DIR=${gap_libdir}|g" ${worksrcpath}/gap.shi
+    reinplace -E "s|GAP_PRG=.*|GAP_PRG=gap|g" ${worksrcpath}/gap.shi
+}
+
+post-build {
+    move ${worksrcpath}/bin/gap.sh ${worksrcpath}/bin/gap
+}
+
+destroot {
+    xinstall -m 755 -d ${destroot}${prefix}/bin
+    xinstall -m 755 ${worksrcpath}/bin/gap ${destroot}${prefix}/bin
+    xinstall -m 755 -d ${destroot}${gap_libdir}/bin
+    eval xinstall -m 755 [glob ${worksrcpath}/bin/*/gap] ${destroot}${gap_libdir}/bin
+    eval xinstall -m 755 [glob ${worksrcpath}/bin/*/gac] ${destroot}${gap_libdir}/bin
+    xinstall -m 755 ${worksrcpath}/sysinfo.gap ${destroot}${gap_libdir}
+    
+    foreach {subdir} {doc etc grp lib pkg prim small trans tst} {
+        copy ${worksrcpath}/${subdir} ${destroot}${gap_libdir}
+    }
+}
