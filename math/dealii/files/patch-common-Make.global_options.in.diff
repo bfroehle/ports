@@ -1,0 +1,11 @@
+--- common/Make.global_options.in.orig	2010-06-28 20:20:16.000000000 -0700
++++ common/Make.global_options.in	2010-06-28 20:20:42.000000000 -0700
+@@ -21,7 +21,7 @@
+ # the following lines will be replaced by the output
+ # of ./configure
+ 
+-D                    = @prefix@
++D                    = @DEAL_II_PATH@
+ CXX                  = @CXX@
+ GXX-VERSION          = @GXX_VERSION@
+ GXX-VERSION-DETAILED = @GXX_VERSION_DETAILED@

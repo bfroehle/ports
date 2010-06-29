@@ -1,0 +1,73 @@
+# $Id$
+PortSystem          1.0
+
+name                dealii
+version             6.3.0
+categories          math
+maintainers         gmail.com:brad.froehle openmaintainer
+description         A Finite Element Differential Equations Analysis Library
+
+long_description    deal.II is a C++ program library targeted at the \
+                    computational solution of partial differential \
+                    equations using adaptive finite elements. It uses \
+                    state-of-the-art programming techniques to offer you a \
+                    modern interface to the complex data structures and \
+                    algorithms required.
+
+homepage            http://www.dealii.org/
+platforms           darwin
+master_sites        http://www.dealii.org/download/
+distname            deal.nodoc-${version}
+worksrcdir          deal.II
+
+patchfiles          patch-common-Make.global_options.in.diff \
+                    patch-source_numerics-mesh_worker_info.cc.diff
+
+checksums           md5 a69286889483c1ed09e1f0ba717abfa9 \
+                    sha1 39876530eebddd0d70f140fb748753eadbe6d707 \
+                    rmd160 fa8edbb22de2330b6553347deb576389568aefe8
+
+destroot {
+	 
+    # Install Libraries
+    xinstall -m 755 -d ${destroot}${prefix}/lib
+    foreach {i} {libbase libbase.g libdeal_II_1d libdeal_II_1d.g \
+    	    	libdeal_II_2d libdeal_II_2d.g libdeal_II_3d libdeal_II_3d.g \
+		liblac liblac.g} {
+	xinstall -m 644 ${worksrcpath}/lib/${i}.${version}.dylib ${destroot}${prefix}/lib
+	ln -s ${i}.${version}.dylib ${destroot}${prefix}/lib/${i}.dylib
+    }
+    eval xinstall -m 644 [glob ${worksrcpath}/lib/contrib/tbb/*/libtbb*.dylib] ${destroot}${prefix}/lib
+
+    # Install Headers
+    xinstall -m 755 -d ${destroot}${prefix}/include/deal.II
+    
+
+    xinstall -m 755 -d ${destroot}${prefix}/include/deal.II/base
+    eval xinstall -m 644 [glob ${worksrcpath}/base/include/base/*.h] ${destroot}${prefix}/include/deal.II/base
+    xinstall -m 755 -d ${destroot}${prefix}/include/deal.II/base/std_cxx1x
+    eval xinstall -m 644 [glob ${worksrcpath}/base/include/base/std_cxx1x/*.h] ${destroot}${prefix}/include/deal.II/base/std_cxx1x
+
+    xinstall -m 755 -d ${destroot}${prefix}/include/deal.II/lac
+    eval xinstall -m 644 [glob ${worksrcpath}/lac/include/lac/*.h] ${destroot}${prefix}/include/deal.II/lac
+
+    foreach {i} {dofs fe grid hp multigrid numerics} {
+      xinstall -m     755 -d ${destroot}${prefix}/include/deal.II/${i}
+      eval xinstall -m 644 [glob ${worksrcpath}/deal.II/include/${i}/*.h] ${destroot}${prefix}/include/deal.II/${i}
+    }
+
+    xinstall -m 755 -d ${destroot}${prefix}/share/deal.II
+    foreach {i} {Make.global_options Make.rules Makefile.template template-arguments} {
+      xinstall -m 644 ${worksrcpath}/common/${i} ${destroot}${prefix}/share/deal.II
+    }
+
+    xinstall -m 755 -d ${destroot}${prefix}/share/deal.II/misc
+    eval xinstall -m 644 [glob ${worksrcpath}/common/misc/*] ${destroot}${prefix}/share/deal.II/misc
+
+    xinstall -m 755 -d ${destroot}${prefix}/share/deal.II/scripts
+    eval xinstall -m 644 [glob ${worksrcpath}/common/scripts/*.pl] ${destroot}${prefix}/share/deal.II/scripts
+    foreach {i} {diffsearch expand_instantiations make_dependencies minimize_boost} {
+      xinstall -m 644 ${worksrcpath}/common/scripts/${i} ${destroot}${prefix}/share/deal.II/scripts
+    }
+
+}
