@@ -1,0 +1,22 @@
+--- aclocal.m4.orig	2010-06-24 14:39:44.000000000 -0700
++++ aclocal.m4	2010-06-29 15:47:54.000000000 -0700
+@@ -1574,17 +1574,8 @@
+ dnl
+ dnl -------------------------------------------------------------
+ AC_DEFUN(DEAL_II_CHECK_RPATH,
+-[ OLD_LDFLAGS="$LDFLAGS"
+-  LDFLAGS="-Wl,-rpath,$DEAL_II_PATH/lib $LDFLAGS"
+-  AC_MSG_CHECKING([whether compiler understands option -Wl,-rpath])
+-  AC_LINK_IFELSE(
+-   [ AC_LANG_PROGRAM([[]],[[]])],
+-     dnl Note the 'space' at the end of the string!
+-   [ AC_MSG_RESULT(yes)
+-     LD_PATH_OPTION="-Wl,-rpath "],
+-   [ AC_MSG_RESULT(no)
+-     LDFLAGS="$OLD_LDFLAGS"
+-     LD_PATH_OPTION="no"])
++[
++     LD_PATH_OPTION="no"
+ ])
+ 
+ 

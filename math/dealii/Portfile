@@ -21,11 +21,20 @@ distname            deal.nodoc-${version}
 worksrcdir          deal.II
 
 patchfiles          patch-common-Make.global_options.in.diff \
-                    patch-source_numerics-mesh_worker_info.cc.diff
+                    patch-source_numerics-mesh_worker_info.cc.diff \
+                    patch-aclocal.m4.diff \
+                    patch-configure.in.diff
 
 checksums           md5 a69286889483c1ed09e1f0ba717abfa9 \
                     sha1 39876530eebddd0d70f140fb748753eadbe6d707 \
                     rmd160 fa8edbb22de2330b6553347deb576389568aefe8
+
+depends_lib         port:boost \
+                    port:atlas
+
+use_autoconf        yes
+
+configure.args-append --with-boost=${prefix}/include --with-lapack --with-lapack --with-blas='f77blas -latlas'
 
 destroot {
 	 

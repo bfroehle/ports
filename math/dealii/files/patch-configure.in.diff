@@ -1,0 +1,27 @@
+--- configure.in.orig	2010-06-24 20:44:21.000000000 -0700
++++ configure.in	2010-06-29 15:49:54.000000000 -0700
+@@ -134,6 +134,11 @@
+ AC_SUBST(CFLAGS)
+ AC_SUBST(CFLAGSPIC)
+ 
++dnl Check if the linker supports -rpath. Do so independently whether we
++dnl actually build deal.II as shared libs since, for example, the TBB
++dnl library is always shared
++DEAL_II_CHECK_RPATH
++
+ dnl -------------------------------------------------------------
+ dnl                          Multithreading
+ dnl -------------------------------------------------------------
+@@ -322,12 +327,6 @@
+   DEAL_II_CHECK_LINK_SONAME
+ fi
+ 
+-dnl Check if the linker supports -rpath. Do so independently whether we
+-dnl actually build deal.II as shared libs since, for example, the TBB
+-dnl library is always shared
+-DEAL_II_CHECK_RPATH
+-
+-
+ AC_SUBST(enableshared)
+ AC_SUBST(static_lib_suffix)
+ AC_SUBST(shared_lib_suffix)
