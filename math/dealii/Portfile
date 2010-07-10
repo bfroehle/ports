@@ -42,7 +42,6 @@ use_autoconf        yes
 
 configure.args-append --prefix=${prefix} --with-boost=${prefix}/include \
                       --with-lapack --with-lapack --with-blas='f77blas -latlas' \
-                      --with-umfpack=/opt/local \
                       --with-umfpack-include=/opt/local/include/ufsparse \
                       --with-umfpack-libs=/opt/local/lib
 
