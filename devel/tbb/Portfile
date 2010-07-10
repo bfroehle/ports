@@ -43,6 +43,7 @@ configure {
 
 destroot {
     set build_dir [exec sh -c "cd ${worksrcpath} && ${build.env} make info | grep build_prefix | cut -f2 -d'='"]
+    set debug_dir "${worksrcpath}/build/${build_dir}_debug"
     set build_dir "${worksrcpath}/build/${build_dir}_release"
     
     # fix paths
@@ -51,12 +52,17 @@ destroot {
     reinplace "s|\\(tbb_bin.\\)\".*\"|\\1\"${prefix}/lib\"|g" \
         ${build_dir}/tbbvars.sh ${build_dir}/tbbvars.csh
 
+    # copy debug lib
+    eval file copy [glob ${debug_dir}/lib*.dylib] ${destroot}${prefix}/lib
+
     # copy lib, include & bin
     eval file copy [glob ${build_dir}/lib*.dylib] ${destroot}${prefix}/lib
     eval file copy [glob ${build_dir}/tbbvars.*sh] ${destroot}${prefix}/bin
     file copy ${worksrcpath}/include/tbb ${destroot}${prefix}/include/tbb
     
     # fix install_name paths
+    system "install_name_tool -id ${prefix}/lib/libtbb_debug.dylib ${destroot}${prefix}/lib/libtbb_debug.dylib"
+    system "install_name_tool -id ${prefix}/lib/libtbbmalloc_debug.dylib ${destroot}${prefix}/lib/libtbbmalloc_debug.dylib"
     system "install_name_tool -id ${prefix}/lib/libtbb.dylib ${destroot}${prefix}/lib/libtbb.dylib"
     system "install_name_tool -id ${prefix}/lib/libtbbmalloc.dylib ${destroot}${prefix}/lib/libtbbmalloc.dylib"
     
