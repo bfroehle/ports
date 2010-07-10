@@ -20,3 +20,11 @@
  ])
  
  
+@@ -6561,6 +6561,7 @@
+                        [AC_MSG_ERROR(installation of UMFPACK could not be determined)])
+
+        if test "x$UMFPACK_LIBDIR" != "x" ; then
++          LDFLAGS="-L${UMFPACK_LIBDIR} $LDFLAGS"
+           AC_CHECK_LIB(
+                [amd],
+                [amd_info],

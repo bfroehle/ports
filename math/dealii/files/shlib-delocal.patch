@@ -1,0 +1,88 @@
+Change library path to -L -l pair to avoid rpath-like trap.
+
+--- common/Make.global_options.in~	2009-05-08 07:57:24.000000000 -0400
++++ common/Make.global_options.in	2009-05-08 09:53:18.000000000 -0400
+@@ -140,30 +140,30 @@
+       lib-contrib-petsc-path.o = $(DEAL_II_PETSC_DIR)/lib/$(DEAL_II_PETSC_ARCH)
+     endif
+     ifeq ($(findstring darwin,$(TARGET)),)
+-      lib-contrib-petsc.g = $(LIBDIR)/libpetscall.g$(lib-suffix)
+-      lib-contrib-petsc.o = $(LIBDIR)/libpetscall$(lib-suffix)
++      lib-contrib-petsc.g = -L$(LIBDIR) -lpetscall.g
++      lib-contrib-petsc.o = -L$(LIBDIR) -lpetscall
+     else
+       ifeq ($(enable-shared),yes)
+         lib-contrib-petsc.g = $(shell echo $(DEAL_II_PETSC_DIR)/lib/$(DEAL_II_PETSC_ARCH)/*$(lib-suffix))
+         lib-contrib-petsc.o = $(shell echo $(DEAL_II_PETSC_DIR)/lib/$(DEAL_II_PETSC_ARCH)/*$(lib-suffix))
+       else
+-        lib-contrib-petsc.g = $(LIBDIR)/libpetscall.g$(lib-suffix)
+-        lib-contrib-petsc.o = $(LIBDIR)/libpetscall$(lib-suffix)
++        lib-contrib-petsc.g = -L$(LIBDIR) -lpetscall.g
++        lib-contrib-petsc.o = -L$(LIBDIR) -lpetscall
+       endif
+     endif  
+   else
+     lib-contrib-petsc-path.g = $(DEAL_II_PETSC_DIR)/$(DEAL_II_PETSC_ARCH)/lib
+     lib-contrib-petsc-path.o = $(DEAL_II_PETSC_DIR)/$(DEAL_II_PETSC_ARCH)/lib
+     ifeq ($(findstring darwin,$(TARGET)),)
+-      lib-contrib-petsc.g = $(LIBDIR)/libpetscall.g$(lib-suffix)
+-      lib-contrib-petsc.o = $(LIBDIR)/libpetscall$(lib-suffix)
++      lib-contrib-petsc.g = -L$(LIBDIR) -lpetscall.g
++      lib-contrib-petsc.o = -L$(LIBDIR) -lpetscall
+     else
+       ifeq ($(enable-shared),yes)
+         lib-contrib-petsc.g = $(shell echo $(DEAL_II_PETSC_DIR)/$(DEAL_II_PETSC_ARCH)/lib/*$(lib-suffix))
+         lib-contrib-petsc.o = $(shell echo $(DEAL_II_PETSC_DIR)/$(DEAL_II_PETSC_ARCH)/lib/*$(lib-suffix))
+       else
+-        lib-contrib-petsc.g = $(LIBDIR)/libpetscall.g$(lib-suffix)
+-        lib-contrib-petsc.o = $(LIBDIR)/libpetscall$(lib-suffix)
++        lib-contrib-petsc.g = -L$(LIBDIR) -lpetscall.g
++        lib-contrib-petsc.o = -L$(LIBDIR) -lpetscall
+       endif
+     endif
+   endif
+@@ -218,32 +218,32 @@
+ 
+ # deal with HSL
+ ifeq ($(USE_CONTRIB_HSL),yes)
+-  lib-hsl = $(LIBDIR)/libhsl$(lib-suffix) 
++  lib-hsl = -L$(LIBDIR) -lhsl
+ endif
+ 
+ 
+ # set paths to all the libraries we need:
+-lib-base.o     = $(LIBDIR)/libbase$(lib-suffix) \
++lib-base.o     = -L$(LIBDIR) -lbase \
+ 		 $(lib-contrib-trilinos)
+-lib-base.g     = $(LIBDIR)/libbase.g$(lib-suffix) \
++lib-base.g     = -L$(LIBDIR) -lbase.g \
+ 		 $(lib-contrib-trilinos)
+ 
+-lib-lac.o      = $(LIBDIR)/liblac$(lib-suffix) \
++lib-lac.o      = -L$(LIBDIR) -llac \
+ 		 $(lib-hsl) \
+ 		 $(lib-contrib-petsc.o) $(lib-contrib-slepc) $(DEAL_II_PETSC_MPIUNI_LIB) \
+ 		 $(lib-contrib-metis)
+-lib-lac.g      = $(LIBDIR)/liblac.g$(lib-suffix) \
++lib-lac.g      = -L$(LIBDIR) -llac.g \
+ 		 $(lib-hsl) \
+ 		 $(lib-contrib-petsc.g) $(lib-contrib-slepc) $(DEAL_II_PETSC_MPIUNI_LIB) \
+ 		 $(lib-contrib-metis)
+ 
+-lib-deal2-1d.o = $(LIBDIR)/libdeal_II_1d$(lib-suffix)
+-lib-deal2-2d.o = $(LIBDIR)/libdeal_II_2d$(lib-suffix)
+-lib-deal2-3d.o = $(LIBDIR)/libdeal_II_3d$(lib-suffix)
+-
+-lib-deal2-1d.g = $(LIBDIR)/libdeal_II_1d.g$(lib-suffix)
+-lib-deal2-2d.g = $(LIBDIR)/libdeal_II_2d.g$(lib-suffix)
+-lib-deal2-3d.g = $(LIBDIR)/libdeal_II_3d.g$(lib-suffix)
++lib-deal2-1d.o = -L$(LIBDIR) -ldeal_II_1d
++lib-deal2-2d.o = -L$(LIBDIR) -ldeal_II_2d
++lib-deal2-3d.o = -L$(LIBDIR) -ldeal_II_3d
++
++lib-deal2-1d.g = -L$(LIBDIR) -ldeal_II_1d.g
++lib-deal2-2d.g = -L$(LIBDIR) -ldeal_II_2d.g
++lib-deal2-3d.g = -L$(LIBDIR) -ldeal_II_3d.g
+ 
+ 
+ # include paths. do not take into account a possibly existing

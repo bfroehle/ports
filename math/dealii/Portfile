@@ -23,18 +23,28 @@ worksrcdir          deal.II
 patchfiles          patch-common-Make.global_options.in.diff \
                     patch-source_numerics-mesh_worker_info.cc.diff \
                     patch-aclocal.m4.diff \
-                    patch-configure.in.diff
+                    patch-configure.in.diff \
+                    patch-common-Make.global_options.in.2.diff \
+                    patch-base_Makefile.diff \
+                    patch-contrib_Makefile.in.diff
 
 checksums           md5 a69286889483c1ed09e1f0ba717abfa9 \
                     sha1 39876530eebddd0d70f140fb748753eadbe6d707 \
                     rmd160 fa8edbb22de2330b6553347deb576389568aefe8
 
 depends_lib         port:boost \
-                    port:atlas
+                    port:atlas \
+                    port:tbb \
+                    port:metis \
+                    port:SuiteSparse
 
 use_autoconf        yes
 
-configure.args-append --with-boost=${prefix}/include --with-lapack --with-lapack --with-blas='f77blas -latlas'
+configure.args-append --prefix=${prefix} --with-boost=${prefix}/include \
+                      --with-lapack --with-lapack --with-blas='f77blas -latlas' \
+                      --with-umfpack=/opt/local \
+                      --with-umfpack-include=/opt/local/include/ufsparse \
+                      --with-umfpack-libs=/opt/local/lib
 
 destroot {
 	 
@@ -46,7 +56,6 @@ destroot {
 	xinstall -m 644 ${worksrcpath}/lib/${i}.${version}.dylib ${destroot}${prefix}/lib
 	ln -s ${i}.${version}.dylib ${destroot}${prefix}/lib/${i}.dylib
     }
-    eval xinstall -m 644 [glob ${worksrcpath}/lib/contrib/tbb/*/libtbb*.dylib] ${destroot}${prefix}/lib
 
     # Install Headers
     xinstall -m 755 -d ${destroot}${prefix}/include/deal.II

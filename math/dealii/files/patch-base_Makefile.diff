@@ -1,0 +1,13 @@
+--- base/Makefile.orig	2010-07-09 19:29:19.000000000 -0700
++++ base/Makefile	2010-07-09 19:30:51.000000000 -0700
+@@ -57,8 +57,8 @@
+   endif
+ 
+   ifeq ($(enable-threads),yes)
+-    deplibs.g += $D/lib/libtbb_debug$(shared-lib-suffix)
+-    deplibs.o += $D/lib/libtbb$(shared-lib-suffix)
++    deplibs.g += $(lib-contrib-tbb.g)
++    deplibs.o += $(lib-contrib-tbb.o)
+   endif
+ 
+ else

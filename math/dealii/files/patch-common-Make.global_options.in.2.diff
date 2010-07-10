@@ -1,0 +1,94 @@
+--- common/Make.global_options.in.orig	2010-07-09 19:18:59.000000000 -0700
++++ common/Make.global_options.in	2010-07-09 19:32:03.000000000 -0700
+@@ -137,8 +137,8 @@
+ 
+   # First up is a twiddle for Darwin/MacOSX
+   ifeq ($(findstring darwin,$(TARGET)),)
+-    lib-contrib-petsc.g = $(LIBDIR)/libpetscall.g$(lib-suffix)
+-    lib-contrib-petsc.o = $(LIBDIR)/libpetscall$(lib-suffix)
++    lib-contrib-petsc.g = -L$(LIBDIR) -lpetscall.g
++    lib-contrib-petsc.o = -L$(LIBDIR) -lpetscall
+   else
+     ifeq ($(enable-shared),yes)
+       # Starting with PETSc versions 2.3.*:
+@@ -159,8 +159,8 @@
+       endif # if PETSC_VERSION 
+     else
+       # and finally this goes for static libraries
+-      lib-contrib-petsc.g = $(LIBDIR)/libpetscall.g$(lib-suffix)
+-      lib-contrib-petsc.o = $(LIBDIR)/libpetscall$(lib-suffix)
++      lib-contrib-petsc.g = -L$(LIBDIR) -lpetscall.g
++      lib-contrib-petsc.o = -L$(LIBDIR) -lpetscall
+     endif
+   endif
+ endif # USE_CONTRIB_PETSC
+@@ -227,44 +227,44 @@
+ # deal with HSL; this should have been $(lib-contrib-hsl) but for a long time we
+ # accidentally had $(lib-hsl) -- so we simply make both symbols available
+ ifeq ($(USE_CONTRIB_HSL),yes)
+-  lib-hsl = $(LIBDIR)/libhsl$(lib-suffix)
++  lib-hsl = -L$(LIBDIR) -lhsl
+   lib-contrib-hsl = $(lib-hsl)
+ endif
+ 
+ # need to link with libtbb if we're using threads
+ ifeq ($(enable-threads),yes)
+-  lib-contrib-tbb.g = $D/lib/libtbb_debug$(shared-lib-suffix)
+-  lib-contrib-tbb.o = $D/lib/libtbb$(shared-lib-suffix)
++  lib-contrib-tbb.g = -ltbb_debug
++  lib-contrib-tbb.o = -ltbb
+ endif
+ 
+ # set paths to all the libraries we need:
+-lib-base.o     = $(LIBDIR)/libbase$(lib-suffix) \
++lib-base.o     = -L$(LIBDIR) -lbase \
+ 		 $(lib-contrib-trilinos) \
+ 		 $(lib-contrib-tbb.o)
+-lib-base.g     = $(LIBDIR)/libbase.g$(lib-suffix) \
++lib-base.g     = -L$(LIBDIR) -lbase.g \
+ 		 $(lib-contrib-trilinos) \
+ 		 $(lib-contrib-tbb.g)
+ 
+-lib-lac.o      = $(LIBDIR)/liblac$(lib-suffix) \
++lib-lac.o      = -L$(LIBDIR) -llac \
+ 		 $(lib-hsl) \
+ 		 $(lib-contrib-petsc.o) $(DEAL_II_PETSC_MPIUNI_LIB) \
+                  $(lib-contrib-slepc) \
+                  $(lib-contrib-mumps) \
+ 		 $(lib-contrib-metis)
+-lib-lac.g      = $(LIBDIR)/liblac.g$(lib-suffix) \
++lib-lac.g      = -L$(LIBDIR) -llac.g \
+ 		 $(lib-hsl) \
+ 		 $(lib-contrib-petsc.g) $(DEAL_II_PETSC_MPIUNI_LIB) \
+                  $(lib-contrib-slepc) \
+                  $(lib-contrib-mumps) \
+ 		 $(lib-contrib-metis)
+ 
+-lib-deal2-1d.o = $(LIBDIR)/libdeal_II_1d$(lib-suffix)
+-lib-deal2-2d.o = $(LIBDIR)/libdeal_II_2d$(lib-suffix)
+-lib-deal2-3d.o = $(LIBDIR)/libdeal_II_3d$(lib-suffix)
+-
+-lib-deal2-1d.g = $(LIBDIR)/libdeal_II_1d.g$(lib-suffix)
+-lib-deal2-2d.g = $(LIBDIR)/libdeal_II_2d.g$(lib-suffix)
+-lib-deal2-3d.g = $(LIBDIR)/libdeal_II_3d.g$(lib-suffix)
++lib-deal2-1d.o = -L$(LIBDIR) -ldeal_II_1d
++lib-deal2-2d.o = -L$(LIBDIR) -ldeal_II_2d
++lib-deal2-3d.o = -L$(LIBDIR) -ldeal_II_3d
++
++lib-deal2-1d.g = -L$(LIBDIR) -ldeal_II_1d
++lib-deal2-2d.g = -L$(LIBDIR) -ldeal_II_2d
++lib-deal2-3d.g = -L$(LIBDIR) -ldeal_II_3d
+ 
+ 
+ # include paths. do not take into account a possibly existing
+@@ -316,10 +316,6 @@
+   INCLUDE += -I$(include-path-mumps)
+ endif
+ 
+-ifeq ($(enable-threads),yes)
+-  INCLUDE += -I$(shell echo $D/contrib/tbb/tbb*/include)
+-endif
+-
+ # compiler flags for debug and optimized mode
+ CXXFLAGS.g   = @DEFS@ @CXXFLAGSG@  $(INCLUDE)
+ CXXFLAGS.o   = @DEFS@ @CXXFLAGSO@  $(INCLUDE)
