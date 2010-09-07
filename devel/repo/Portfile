@@ -1,0 +1,37 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 8; truncate-lines: t; indent-tabs-mode: nil; c-basic-offset: 4
+# $Id: $
+# vim: set fileencoding=utf-8 tabstop=8 shiftwidth=4 softtabstop=4 noexpandtab filetype=tcl :
+
+PortSystem 1.0
+
+name		    repo
+version		    1.9
+categories	    devel
+maintainers	    gmail.com:brad.froehle
+platforms	    darwin
+description	    Repo (Android tool)
+long_description							\
+    A tool to manage the multiple git repositories in Android development.
+
+homepage	    http://developer.android.com/
+master_sites	    http://android.git.kernel.org/
+distfiles	    ${name}
+
+checksums \
+        md5     2d1a8f64006dda271f6ba31f3b44ae86		\
+        sha1    10fb73af430dc33f6f1d17bd6e842c0ffc0032ad \
+        rmd160  63bdefc1cba7390eb42e624b5a64275f8d7a5f1d
+
+
+extract.mkdir   yes
+extract.cmd     cp
+extract.pre_args
+extract.post_args ${worksrcpath}
+
+use_configure   no
+
+build {}
+
+destroot {
+    xinstall -m 755 ${worksrcpath}/${name} ${destroot}${prefix}/bin
+}
